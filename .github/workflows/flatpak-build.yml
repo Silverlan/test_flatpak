@@ -31,7 +31,7 @@ jobs:
 
       - name: Export repository
         run: |
-          flatpak build-export --user repo build-dir
+          flatpak build-export repo build-dir
 
       - name: Create Flatpak bundle
         run: |
