@@ -26,8 +26,8 @@ jobs:
       - name: Build Flatpak
         run: |
           flatpak-builder --user --force-clean \
-            --install-deps-from=flathub \
-            build-dir your-app.yml
+            --install-deps-from=flathub --repo=repo \
+            build-dir com.silverlan.PFM.yml
 
       - name: Export repository
         run: |
@@ -37,12 +37,12 @@ jobs:
         run: |
           flatpak build-bundle \
             repo \
-            your-app.flatpak \
-            your.app.id \
+            com.silverlan.PFM.flatpak \
+            com.silverlan.PFM \
             --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo
 
       - name: Upload Flatpak bundle
         uses: actions/upload-artifact@v4
         with:
-          name: your-app.flatpak
-          path: your-app.flatpak
+          name: com.silverlan.PFM.flatpak
+          path: com.silverlan.PFM.flatpak
