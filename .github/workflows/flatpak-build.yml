@@ -31,7 +31,7 @@ jobs:
 
       - name: Export repository
         run: |
-          flatpak-builder --user --repo=repo build-dir your-app.yml
+          flatpak build-export --user repo build-dir
 
       - name: Create Flatpak bundle
         run: |
