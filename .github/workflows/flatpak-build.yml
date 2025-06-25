@@ -25,19 +25,16 @@ jobs:
 
       - name: Build Flatpak
         run: |
-          # Clean and build into 'build-dir'
           flatpak-builder --force-clean \
             --install-deps-from=flathub \
             build-dir your-app.yml
 
       - name: Export repository
         run: |
-          # Create a local repo containing your built files
           flatpak-builder --repo=repo build-dir your-app.yml
 
       - name: Create Flatpak bundle
         run: |
-          # Adjust your.app.id to match the 'id' in your YAML manifest
           flatpak build-bundle \
             repo \
             your-app.flatpak \
@@ -45,7 +42,7 @@ jobs:
             --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo
 
       - name: Upload Flatpak bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: your-app.flatpak
           path: your-app.flatpak
