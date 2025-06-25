@@ -1,28 +1,73 @@
-app-id: org.example.Hello
+app-id: com.silverlan.PFM
 runtime: org.freedesktop.Platform
-runtime-version: "21.08"
+runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 
-command: hello
+command: pfm
 
-finish-args:
-  # grant network access and home‐dir read access
+build-options:
+  append-path: /usr/lib/sdk/git-lfs/bin
+  build-args:
   - --share=network
-  - --filesystem=home
 
 modules:
-  - name: hello
+  # ─── Module 1: fetch / install git-lfs ─────────────────────────────────────
+  - name: git-lfs
     buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/git-lfs/git-lfs/releases/download/v3.5.1/git-lfs-linux-amd64-v3.5.1.tar.gz
+        sha256: '6f28eb19faa7a968882dca190d92adc82493378b933958d67ceaeb9ebe4d731e'
+        strip-components: 1
     build-commands:
-      # create the app bin directory
-      - mkdir -p /app/bin
-      # generate a tiny shell script
+      # Create /app/bin (FLATPAK_DEST) and copy the git-lfs binary into it
+      - install -Dm755 git-lfs ${FLATPAK_DEST}/bin/git-lfs
+
+  - name: pragma
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/Silverlan/tmp_pragma2.git
+        branch: main
+    build-commands:
       - |
-        cat > hello << 'EOF'
-        #!/usr/bin/env bash
-        echo "Hello, Flatpak!"
-        EOF
-      # make it executable and install
-      - chmod +x hello
-      - install hello /app/bin/hello
-    sources: []
+        # Patchelf
+        mkdir patchelf && \
+        cd patchelf && \
+        curl -L -o patchelf.tar.gz https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0-x86_64.tar.gz && \
+        tar -xzf patchelf.tar.gz && \
+        cd ..
+      - |
+        # Build
+        export PATH="$(pwd)/patchelf/bin:$PATH" && \
+        git lfs install --skip-repo && \
+        python3 build_scripts/build.py --with-vr --with-pfm --with-all-pfm-modules --no-sudo --no-confirm --install-directory=/app
+      - |
+        # ensure /app/bin exists
+        mkdir -p /app/bin
+        # for every executable file under /app, link it into /app/bin
+        for exe in /app/* ; do
+          if [ -x "$exe" -a ! -d "$exe" ]; then
+            ln -sf "$exe" /app/bin/$(basename "$exe")
+          fi
+        done
+      - ls -R /app
+
+finish-args:
+  # File system access
+  - --filesystem=~/.config/pfm
+  - --filesystem=~/snap/steam/common/.local/share/Steam:ro
+  - --filesystem=~/.steam/root:ro
+
+  - --share=ipc
+  - --socket=pulseaudio
+
+  # GPU access for OpenGL / DRI
+  - --device=dri
+
+  # Let the app talk to X11 OR Wayland compositors
+  - --socket=x11
+  - --socket=wayland
+
+  # Network access (for auto-updates or online assets)
+  - --share=network
