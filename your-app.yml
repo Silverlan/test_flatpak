@@ -1,0 +1,28 @@
+app-id: org.example.Hello
+runtime: org.freedesktop.Platform
+runtime-version: "21.08"
+sdk: org.freedesktop.Sdk
+
+command: hello
+
+finish-args:
+  # grant network access and home‐dir read access
+  - --share=network
+  - --filesystem=home
+
+modules:
+  - name: hello
+    buildsystem: simple
+    build-commands:
+      # create the app bin directory
+      - mkdir -p /app/bin
+      # generate a tiny shell script
+      - |
+        cat > hello << 'EOF'
+        #!/usr/bin/env bash
+        echo "Hello, Flatpak!"
+        EOF
+      # make it executable and install
+      - chmod +x hello
+      - install hello /app/bin/hello
+    sources: []
