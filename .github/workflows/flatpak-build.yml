@@ -25,13 +25,13 @@ jobs:
 
       - name: Build Flatpak
         run: |
-          flatpak-builder --force-clean \
+          flatpak-builder --user --force-clean \
             --install-deps-from=flathub \
             build-dir your-app.yml
 
       - name: Export repository
         run: |
-          flatpak-builder --repo=repo build-dir your-app.yml
+          flatpak-builder --user --repo=repo build-dir your-app.yml
 
       - name: Create Flatpak bundle
         run: |
