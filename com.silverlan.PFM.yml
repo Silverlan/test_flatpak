@@ -45,6 +45,14 @@ modules:
         tar -xzf patchelf.tar.gz && \
         cd ..
       - |
+        # clang-20 requirements
+        apt-get update && apt-get install -y \
+            lsb-release \
+            gnupg \
+            ca-certificates \
+            apt-transport-https \
+            wget
+      - |
         # clang-20
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
