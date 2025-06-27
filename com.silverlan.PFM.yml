@@ -34,7 +34,7 @@ modules:
     buildsystem: simple
     sources:
       - type: git
-        url: https://github.com/Silverlan/tmp_pragma2.git
+        url: https://github.com/Silverlan/tmp_pragma3.git
         branch: main
     build-commands:
       - |
