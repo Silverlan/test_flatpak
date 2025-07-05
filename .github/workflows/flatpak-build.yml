@@ -52,6 +52,7 @@ jobs:
 
       #- name: Upload Flatpak bundle
       #  uses: actions/upload-artifact@v4
+      
       #  with:
       #    name: com.silverlan.PFM.flatpak
       #    path: com.silverlan.PFM.flatpak
