@@ -26,11 +26,12 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v3
-        
+
       - name: Install Flatpak-Builder
         shell: bash
         run:   |
           sudo apt install flatpak flatpak-builder
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     
       - name: Flatpak Build
         shell: bash
