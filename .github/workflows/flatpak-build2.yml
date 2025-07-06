@@ -24,6 +24,11 @@ jobs:
           - os: ubuntu-latest
             name: "Ubuntu Latest"
     steps:
+      - name: Install Flatpak-Builder
+        shell: bash
+        run:   |
+          sudo apt install flatpak flatpak-builder
+    
       - name: Flatpak Build
         shell: bash
         run:   |
