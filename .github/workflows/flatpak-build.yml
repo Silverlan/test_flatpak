@@ -56,3 +56,8 @@ jobs:
       #  with:
       #    name: com.silverlan.PFM.flatpak
       #    path: com.silverlan.PFM.flatpak
+
+      - name: Handle Error
+        uses: Silverlan/common_actions/action_handle_error@main
+        if: failure()
+        
