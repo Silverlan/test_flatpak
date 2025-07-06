@@ -45,6 +45,8 @@ modules:
         tar -xzf patchelf.tar.gz && \
         cd ..
       - |
+        apt-get install rsync
+      - |
         # Build
         export PATH="$(pwd)/patchelf/bin:$PATH" && \
         git lfs install --skip-repo && \
