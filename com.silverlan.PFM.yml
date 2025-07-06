@@ -48,7 +48,7 @@ modules:
         # Build
         export PATH="$(pwd)/patchelf/bin:$PATH" && \
         git lfs install --skip-repo && \
-        python3 build_scripts/build.py --with-vr --with-pfm --with-all-pfm-modules --no-sudo --no-confirm --install-directory=/app
+        python3 build_scripts/build.py --with-vr --with-pfm --with-all-pfm-modules --build-cycles --no-sudo --no-confirm --install-directory=/app
       - |
         # ensure /app/bin exists
         mkdir -p /app/bin
