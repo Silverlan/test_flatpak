@@ -1,0 +1,39 @@
+name: Test
+on:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: check-build-lin-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # See https://github.com/git-lfs/git-lfs/issues/5749
+  GIT_CLONE_PROTECTION_ACTIVE: 'false'
+
+jobs:
+  build:
+    name: Build - ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: ubuntu-latest
+            name: "Ubuntu Latest"
+    steps:
+      - name: Flatpak Build
+        shell: bash
+        run:   |
+          flatpak-builder \
+            --force-clean \
+            --user \
+            --install-deps-from=flathub \
+            --repo=repo \
+            builddir com.silverlan.PFM.yml > log.txt
+
+      - name: Handle Error
+        uses: Silverlan/common_actions/action_handle_error@main
+        if: failure()
+        
