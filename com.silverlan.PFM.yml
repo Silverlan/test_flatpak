@@ -45,6 +45,10 @@ modules:
         tar -xzf patchelf.tar.gz && \
         cd ..
       - |
+        # df
+        echo "AVAILABLE DISK SPACE:"
+        df -h
+      - |
         # Build
         export PATH="$(pwd)/patchelf/bin:$PATH" && \
         git lfs install --skip-repo && \
