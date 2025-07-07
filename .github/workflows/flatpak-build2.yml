@@ -37,27 +37,25 @@ jobs:
         shell: bash
         run:   |
           sudo apt install flatpak flatpak-builder
-          # flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          sudo flatpak remote-add --if-not-exists flathub \
-              https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     
-      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-        with:
-          bundle: palette.flatpak
-          manifest-path: com.silverlan.PFM.yml
-          cache-key: flatpak-builder-${{ github.sha }}
-          arch: x86_64
-          verbose: true
+      #- uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      #  with:
+      #    bundle: palette.flatpak
+      #    manifest-path: com.silverlan.PFM.yml
+      #    cache-key: flatpak-builder-${{ github.sha }}
+      #    arch: x86_64
+      #    verbose: true
 
-      #- name: Flatpak Build
-      #  shell: bash
-      #  run:   |
-      #    flatpak-builder \
-      #      --force-clean \
-      #      --user \
-      #      --install-deps-from=flathub \
-      #      --repo=repo \
-      #      builddir com.silverlan.PFM.yml > log.txt
+      - name: Flatpak Build
+        shell: bash
+        run:   |
+          flatpak-builder \
+            --force-clean \
+            --user \
+            --install-deps-from=flathub \
+            --repo=repo \
+            builddir com.silverlan.PFM.yml
 
       - name: Handle Error
         uses: Silverlan/common_actions/action_handle_error@main
