@@ -27,6 +27,12 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v3
 
+      - name: PRE FLATPAKBUILDER DISK SPACE
+        shell: bash
+        run:   |
+          echo "PRE AVAILABLE DISK SPACE:"
+          df -h
+
       - name: Install Flatpak-Builder
         shell: bash
         run:   |
