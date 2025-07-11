@@ -36,6 +36,7 @@ jobs:
       - name: Install Flatpak-Builder
         shell: bash
         run:   |
+          sudo apt update
           sudo apt install flatpak flatpak-builder
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     
