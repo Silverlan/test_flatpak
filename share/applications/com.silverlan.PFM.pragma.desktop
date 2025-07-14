@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Type=Application
+Name=Pragma
+GenericName=3D Game Engine
+Exec=com.silverlan.pragma.sh
+Categories=Game;
+PrefersNonDefaultGPU=1
+SingleMainWindow=1

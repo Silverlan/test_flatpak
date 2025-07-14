@@ -1,0 +1,8 @@
+
+[Desktop Entry]
+Type=Application
+Name=Pragma Server
+GenericName=Dedicated Game Server
+Exec=com.silverlan.pragma_server.sh
+Categories=Utility;
+SingleMainWindow=1

@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Type=Application
+Name=PFM
+GenericName=3D Animation Software
+Exec=com.silverlan.PFM.sh
+Categories=Graphics;
+PrefersNonDefaultGPU=1
+SingleMainWindow=1

@@ -1,0 +1,7 @@
+
+[Desktop Entry]
+Type=Application
+Name=UDM Converter
+GenericName=File Format Converter
+Exec=com.silverlan.udm_convert.sh
+Categories=Utility;

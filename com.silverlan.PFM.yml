@@ -3,7 +3,7 @@ runtime: org.freedesktop.Platform
 runtime-version: "23.08"
 sdk: org.freedesktop.Sdk
 
-command: pfm
+command: com.silverlan.PFM.sh
 
 build-options:
   append-path: /usr/lib/sdk/git-lfs/bin
@@ -11,13 +11,6 @@ build-options:
   - --share=network
 
 modules:
-  - name: Maximize build space
-    uses: easimon/maximize-build-space@master
-    with:
-      root-reserve-mb: 512
-      swap-size-mb: 1024
-      remove-dotnet: 'true'
-
   # ─── Module 1: fetch / install git-lfs ─────────────────────────────────────
   - name: git-lfs
     buildsystem: simple
@@ -29,6 +22,48 @@ modules:
     build-commands:
       # Create /app/bin (FLATPAK_DEST) and copy the git-lfs binary into it
       - install -Dm755 git-lfs ${FLATPAK_DEST}/bin/git-lfs
+
+  - name: flatpak-resources
+    buildsystem: simple
+    sources:
+      - type: file
+        path: executables/com.silverlan.PFM.sh
+      - type: file
+        path: executables/com.silverlan.PFM.prad.sh
+      - type: file
+        path: executables/com.silverlan.PFM.pragma.sh
+      - type: file
+        path: executables/com.silverlan.PFM.pragma_server.sh
+      - type: file
+        path: executables/com.silverlan.PFM.render_raytracing.sh
+      - type: file
+        path: executables/com.silverlan.PFM.udm_convert.sh
+      - type: file
+        path: share/applications/com.silverlan.PFM.desktop
+      - type: file
+        path: share/applications/com.silverlan.PFM.prad.desktop
+      - type: file
+        path: share/applications/com.silverlan.PFM.pragma.desktop
+      - type: file
+        path: share/applications/com.silverlan.PFM.pragma_server.desktop
+      - type: file
+        path: share/applications/com.silverlan.PFM.render_raytracing.desktop
+      - type: file
+        path: share/applications/com.silverlan.PFM.udm_convert.desktop
+    build-commands:
+    - install -Dm755 ${FLATPAK_ID}.sh -t /app/bin
+    - install -Dm755 ${FLATPAK_ID}.prad.sh -t /app/bin
+    - install -Dm755 ${FLATPAK_ID}.pragma.sh -t /app/bin
+    - install -Dm755 ${FLATPAK_ID}.pragma_server.sh -t /app/bin
+    - install -Dm755 ${FLATPAK_ID}.render_raytracing.sh -t /app/bin
+    - install -Dm755 ${FLATPAK_ID}.udm_convert.sh -t /app/bin
+
+    - install -Dm644 ${FLATPAK_ID}.desktop -t /app/share/applications
+    - install -Dm644 ${FLATPAK_ID}.prad.desktop -t /app/share/applications
+    - install -Dm644 ${FLATPAK_ID}.pragma.desktop -t /app/share/applications
+    - install -Dm644 ${FLATPAK_ID}.pragma_server.desktop -t /app/share/applications
+    - install -Dm644 ${FLATPAK_ID}.render_raytracing.desktop -t /app/share/applications
+    - install -Dm644 ${FLATPAK_ID}.udm_convert.desktop -t /app/share/applications
 
   - name: pragma
     buildsystem: simple
@@ -45,24 +80,10 @@ modules:
         tar -xzf patchelf.tar.gz && \
         cd ..
       - |
-        # df
-        echo "AVAILABLE DISK SPACE:"
-        df -h
-      - |
         # Build
         export PATH="$(pwd)/patchelf/bin:$PATH" && \
         git lfs install --skip-repo && \
-        python3 build_scripts/build.py --with-vr --with-pfm --with-all-pfm-modules --build-cycles --no-sudo --no-confirm --build-config=Release --install-directory=/app
-      - |
-        # ensure /app/bin exists
-        mkdir -p /app/bin
-        # for every executable file under /app, link it into /app/bin
-        for exe in /app/* ; do
-          if [ -x "$exe" -a ! -d "$exe" ]; then
-            ln -sf "$exe" /app/bin/$(basename "$exe")
-          fi
-        done
-      - ls -R /app
+        python3 build_scripts/build.py --with-pfm --with-all-pfm-modules --with-vr --with-swiftshader --no-sudo --no-confirm --install-directory=/app
 
 finish-args:
   # File system access
